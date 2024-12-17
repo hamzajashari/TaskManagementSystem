@@ -1,3 +1,17 @@
+CREATE OR PROCEDURE [dbo].[sp_CreateTask]
+    @Title NVARCHAR(200),
+    @Description NVARCHAR(MAX),
+    @DueDate DATETIME2,
+    @Priority INT,
+    @UserId NVARCHAR(450),
+    @TaskId INT OUTPUT
+AS
+BEGIN
+    INSERT INTO Tasks (Title, Description, DueDate, Priority, UserId,IsCompleted,CreatedAt)
+    VALUES (@Title, @Description, @DueDate, @Priority, @UserId,0,GetDate());
+    
+    SET @TaskId = SCOPE_IDENTITY();
+END;
 CREATE OR ALTER PROCEDURE [dbo].[sp_GetTasks]
     @UserId NVARCHAR(450),
     @IsCompleted BIT = NULL,
@@ -51,6 +65,25 @@ CREATE OR ALTER PROCEDURE [dbo].[sp_DeleteTask]
 AS
 BEGIN
     DELETE FROM Tasks
+    WHERE Id = @TaskId AND UserId = @UserId;
+END;
+
+CREATE OR ALTER PROCEDURE [dbo].[sp_GetTaskById]
+    @TaskId INT,
+    @UserId NVARCHAR(450)
+AS
+BEGIN
+    SELECT 
+        Id,
+        Title,
+        Description,
+        IsCompleted,
+        DueDate,
+        Priority,
+        UserId,
+        CreatedAt,
+        UpdatedAt
+    FROM Tasks
     WHERE Id = @TaskId AND UserId = @UserId;
 END;
 

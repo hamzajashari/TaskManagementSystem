@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TaskSystem.Models;
 using TaskSystem.Services.IServices;
 using TaskSystem.Services;
+using TaskSystem.Exceptions;
 namespace TaskSystem.Controllers;
 
 
@@ -26,7 +27,21 @@ public class TasksController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<TaskDTO>> GetTask(int id)
     {
-        return Ok(await _taskService.GetTaskByIdAsync(id));
+        try
+        {
+            var task = await _taskService.GetTaskByIdAsync(id);
+            return Ok(task);
+        }
+        catch (NotFoundException ex)
+        {
+            // Return a 404 status code with a message when the task is not found
+            return NotFound(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            // Return a 500 status code for any other unexpected errors
+            return StatusCode(500, new { message = "An error occurred while processing your request", error = ex.Message });
+        }
     }
 
     [HttpPost]

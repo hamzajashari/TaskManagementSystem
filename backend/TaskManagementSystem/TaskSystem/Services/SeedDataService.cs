@@ -36,7 +36,10 @@ public class SeedDataService : ISeedDataService
             
             Console.WriteLine("Seeding admin user...");
             await SeedAdminUserIfNotExists();
-            
+
+            Console.WriteLine("Seeding test user...");
+            await SeedTestUserIfNotExists();
+
             Console.WriteLine("Seeding completed successfully.");
         }
         catch (Exception ex)
@@ -79,6 +82,36 @@ public class SeedDataService : ISeedDataService
             }
         }
     }
+    private async Task SeedTestUserIfNotExists()
+    {
+        if (await _userManager.FindByEmailAsync(ApplicationConstants.TestAccount.Email) == null)
+        {
+            // if it doesn't exist, create it
+            var user = new AppUser
+            {
+                FullName = ApplicationConstants.TestAccount.FullName,
+                UserName = ApplicationConstants.TestAccount.UserName,
+                Email = ApplicationConstants.TestAccount.Email,
+                EmailConfirmed = true,
+                LockoutEnabled = false,
+            };
+            var result = await _userManager.CreateAsync(user, ApplicationConstants.TestAccount.Password);
+            if (!result.Succeeded)
+            {
+                var errors = result.Errors.Select(e => e.Description);
+                throw new Exception(string.Join(Environment.NewLine, errors));
+            }
+
+            // Add Test user to UserRole
+            result = await _userManager.AddToRoleAsync(user, ApplicationConstants.RolesTypes.User);
+            if (!result.Succeeded)
+            {
+                var errors = result.Errors.Select(e => e.Description);
+                throw new Exception(string.Join(Environment.NewLine, errors));
+            }
+        }
+    }
+
     private async Task SeedRolesIfNotExists()
     {
         if (!await _roleManager.RoleExistsAsync(ApplicationConstants.RolesTypes.Admin))
