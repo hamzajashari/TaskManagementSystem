@@ -6,6 +6,8 @@ using TaskSystem.Utilities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using TaskSystem.Services.IServices;
+using TaskSystem.Services;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +27,10 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 })
 .AddEntityFrameworkStores<AppDbContext>()
 .AddDefaultTokenProviders();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ITaskService, TaskService>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(option =>
 {

@@ -12,8 +12,8 @@ using TaskSystem.Data;
 namespace TaskSystem.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241216162023_InitialIdentityMigration")]
-    partial class InitialIdentityMigration
+    [Migration("20241216190829_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -231,6 +231,105 @@ namespace TaskSystem.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "8d71efc2-4561-480b-8cae-35c9d134a1c8",
+                            Email = "demo@example.com",
+                            EmailConfirmed = true,
+                            FullName = "Demo",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "DEMO@EXAMPLE.COM",
+                            NormalizedUserName = "DEMO@EXAMPLE.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAELbHLYHKVeGKWB7Hk5sJbSdeUy8YRUyL0YPRYRMh9P+GHuJ+yGG6jzIJHQQRt5YO4Q==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "89cabd45-eea3-4d97-a708-55f4102560d7",
+                            TwoFactorEnabled = false,
+                            UserName = "demo@example.com"
+                        });
+                });
+
+            modelBuilder.Entity("TaskSystem.Models.TaskModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Tasks");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2024, 3, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Draft and finalize the project proposal for the new client",
+                            DueDate = new DateTime(2024, 3, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsCompleted = false,
+                            Priority = 2,
+                            Title = "Complete Project Proposal",
+                            UpdatedAt = new DateTime(2024, 3, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UserId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2024, 3, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Review pull requests and merge approved changes",
+                            DueDate = new DateTime(2024, 3, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsCompleted = false,
+                            Priority = 1,
+                            Title = "Review Code Changes",
+                            UpdatedAt = new DateTime(2024, 3, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UserId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2024, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Update API documentation with recent changes",
+                            DueDate = new DateTime(2024, 3, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsCompleted = true,
+                            Priority = 0,
+                            Title = "Update Documentation",
+                            UpdatedAt = new DateTime(2024, 3, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UserId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -282,6 +381,17 @@ namespace TaskSystem.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("TaskSystem.Models.TaskModel", b =>
+                {
+                    b.HasOne("TaskSystem.Models.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

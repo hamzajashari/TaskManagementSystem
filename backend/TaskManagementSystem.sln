@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayCafe", "PlayCafe\PlayCafe.csproj", "{09EDD73B-CBBD-4A01-B77D-138E37593134}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskSystem", "TaskManagementSystem\TaskSystem\TaskSystem.csproj", "{2C4B12F7-009E-4370-AC56-8975E3E9BE1B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskSystem.Tests", "TaskManagementSystem\TaskSystem.Tests\TaskSystem.Tests.csproj", "{9E3946D5-7F20-4ACC-BFF7-4C4B395CC7AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{09EDD73B-CBBD-4A01-B77D-138E37593134}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{09EDD73B-CBBD-4A01-B77D-138E37593134}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{09EDD73B-CBBD-4A01-B77D-138E37593134}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{09EDD73B-CBBD-4A01-B77D-138E37593134}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C4B12F7-009E-4370-AC56-8975E3E9BE1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C4B12F7-009E-4370-AC56-8975E3E9BE1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C4B12F7-009E-4370-AC56-8975E3E9BE1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C4B12F7-009E-4370-AC56-8975E3E9BE1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E3946D5-7F20-4ACC-BFF7-4C4B395CC7AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E3946D5-7F20-4ACC-BFF7-4C4B395CC7AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E3946D5-7F20-4ACC-BFF7-4C4B395CC7AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E3946D5-7F20-4ACC-BFF7-4C4B395CC7AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
