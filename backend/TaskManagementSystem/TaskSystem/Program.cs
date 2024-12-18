@@ -12,6 +12,18 @@ using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173") // Client
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
 var connectionString = builder.Configuration.GetConnectionString("AppDbContextConnection") ?? throw new InvalidOperationException("Connection string 'AppDbContextConnection' not found.");
 var jwtConfig = builder.Configuration.GetSection(nameof(JwtConfig)).Get<JwtConfig>() ?? throw new InvalidOperationException("JwtConfig Is Missing. Please Add Them In appSettings.json OR appSettings.Development.json");
 
@@ -74,6 +86,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.UseCors("AllowLocalhost");
 app.MapControllers();
 
 app.Run();

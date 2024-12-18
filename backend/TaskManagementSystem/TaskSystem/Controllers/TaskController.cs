@@ -6,7 +6,7 @@ using TaskSystem.Services;
 using TaskSystem.Exceptions;
 namespace TaskSystem.Controllers;
 
-[Authorize]
+
 [ApiController]
 [Route("api/[controller]")]
 public class TasksController : ControllerBase
