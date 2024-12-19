@@ -14,7 +14,7 @@ namespace TaskSystem.Data
             base.OnModelCreating(modelBuilder);
 
             var baseDate = new DateTime(2024, 3, 20);
-            var userId = "9b291056-179b-437b-bf24-24ee9d501619"; //ADMIN
+            var userId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"; //ADMIN
 
 
             modelBuilder.Entity<TaskModel>().HasData(

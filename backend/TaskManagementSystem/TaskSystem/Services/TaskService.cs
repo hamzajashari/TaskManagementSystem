@@ -24,10 +24,10 @@ public class TaskService : ITaskService
 
     private string GetCurrentUserId()
     {
-        //return _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier) 
-        //    ?? throw new UnauthorizedAccessException("User not authenticated");
+        return _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier)
+            ?? throw new UnauthorizedAccessException("User not authenticated");
 
-        return "9b291056-179b-437b-bf24-24ee9d501619";
+        //return "a18be9c0-aa65-4af8-bd17-00bd9344e575";
     }
 
     public async Task<IEnumerable<TaskDTO>> GetTasksAsync(TaskFilterParams filterParams)
@@ -57,7 +57,9 @@ public class TaskService : ITaskService
                             Description = reader.GetString("Description"),
                             DueDate = reader.GetDateTime("DueDate"),
                             CreatedAt = reader.GetDateTime("CreatedAt"),
-                            UpdatedAt = reader.GetDateTime("UpdatedAt"),
+                            UpdatedAt = reader.IsDBNull(reader.GetOrdinal("UpdatedAt"))
+                            ? null
+                            : reader.GetDateTime("UpdatedAt"),
                             IsCompleted = reader.GetBoolean("IsCompleted"),
                             Priority = (Priority)reader.GetInt32("Priority"),
                             UserId = reader.GetString("UserId")

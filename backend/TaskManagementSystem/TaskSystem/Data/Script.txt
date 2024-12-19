@@ -1,14 +1,15 @@
-CREATE OR PROCEDURE [dbo].[sp_CreateTask]
+CREATE OR ALTER PROCEDURE [dbo].[sp_CreateTask]
     @Title NVARCHAR(200),
     @Description NVARCHAR(MAX),
     @DueDate DATETIME2,
     @Priority INT,
+	@CreatedAt DATETIME2,
     @UserId NVARCHAR(450),
     @TaskId INT OUTPUT
 AS
 BEGIN
     INSERT INTO Tasks (Title, Description, DueDate, Priority, UserId,IsCompleted,CreatedAt)
-    VALUES (@Title, @Description, @DueDate, @Priority, @UserId,0,GetDate());
+    VALUES (@Title, @Description, @DueDate, @Priority, @UserId,0,@CreatedAt);
     
     SET @TaskId = SCOPE_IDENTITY();
 END;

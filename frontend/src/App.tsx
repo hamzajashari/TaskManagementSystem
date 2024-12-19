@@ -1,20 +1,68 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import TaskDetails from './components/TaskDetails';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import { AuthProvider } from './contexts/AuthContext';
+import ProtectedRoute from './components/auth/ProtectedRoute';
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
 import TaskList from './components/TaskList';
+import CreateTask from './components/CreateTask';
 import EditTask from './components/EditTask';
-import Home from './components/Home'; 
+import NavBar from './components/NavBar';
 
 const App = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/tasks" element={<TaskList />} />
-        <Route path="/tasks/:id" element={<TaskDetails />} />
-        <Route path="/edit-task/:id" element={<EditTask />} />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          {/* Public routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
+          {/* Protected routes */}
+          <Route path="/" element={
+            <ProtectedRoute>
+              <div className="min-h-screen bg-gray-100">
+                <NavBar />
+                <main className="container mx-auto px-4 py-8">
+                  <TaskList />
+                </main>
+              </div>
+            </ProtectedRoute>
+          } />
+          <Route path="/tasks" element={
+            <ProtectedRoute>
+              <div className="min-h-screen bg-gray-100">
+                <NavBar />
+                <main className="container mx-auto px-4 py-8">
+                  <TaskList />
+                </main>
+              </div>
+            </ProtectedRoute>
+          } />
+          <Route path="/create-task" element={
+            <ProtectedRoute>
+              <div className="min-h-screen bg-gray-100">
+                <NavBar />
+                <main className="container mx-auto px-4 py-8">
+                  <CreateTask />
+                </main>
+              </div>
+            </ProtectedRoute>
+          } />
+          <Route path="/edit-task/:id" element={
+            <ProtectedRoute>
+              <div className="min-h-screen bg-gray-100">
+                <NavBar />
+                <main className="container mx-auto px-4 py-8">
+                  <EditTask />
+                </main>
+              </div>
+            </ProtectedRoute>
+          } />
+        </Routes>
+        <Toaster />
+      </Router>
+    </AuthProvider>
   );
 };
 

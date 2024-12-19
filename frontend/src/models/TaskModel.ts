@@ -1,4 +1,3 @@
-
 import { Priority } from './Priority';
 
 export interface TaskModel {
@@ -10,7 +9,7 @@ export interface TaskModel {
   priority: Priority;
   userId: string;
   createdAt: Date;
-  updatedAt?: Date;
+  updatedAt: Date | null;
 }
 
 export interface TaskDTO {
@@ -22,7 +21,7 @@ export interface TaskDTO {
     priority: Priority;
     userId: string;
     createdAt: Date;
-    updatedAt?: Date;
+    updatedAt: Date | null;
   }
   export interface CreateTaskDTO {
     title: string;
@@ -45,5 +44,5 @@ export interface TaskDTO {
     dueDateTo?: Date;
     searchTerm?: string;
     sortBy?: string;
-    sortDescending: boolean;
+    sortDescending?: boolean;
   }

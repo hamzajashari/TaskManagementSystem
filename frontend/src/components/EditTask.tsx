@@ -1,80 +1,67 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axiosClient from '../axiosClient';
+import TaskForm from './ui/TaskForm';
+import Loading from './ui/Loading';
+import { UpdateTaskDTO } from '../models/TaskModel';
+import type { TaskFormData } from './ui/TaskForm';
 
 const EditTask = () => {
   const { id } = useParams<{ id: string }>();
-  const [task, setTask] = useState({ title: '', description: '', status: '' });
-  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const [task, setTask] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
+    const fetchTask = async () => {
+      try {
+        const response = await axiosClient.get(`/api/tasks/${id}`);
+        const taskData = response.data;
+        setTask({
+          ...taskData,
+          dueDate: new Date(taskData.dueDate).toISOString().split('T')[0],
+        });
+      } catch (error) {
+        console.error('Error fetching task:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
     if (id) {
-      const fetchTask = async () => {
-        try {
-          const response = await axiosClient.get(`/api/tasks/${id}`);
-          setTask(response.data);
-        } catch (error) {
-          console.error('Error fetching task:', error);
-        } finally {
-          setLoading(false);
-        }
-      };
       fetchTask();
-    } else {
-      setLoading(false);
     }
   }, [id]);
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+  const handleSubmit = async (formData: TaskFormData) => {
+    setIsSaving(true);
     try {
-      if (id) {
-        await axiosClient.put(`/api/tasks/${id}`, task);
-      } else {
-        await axiosClient.post('/api/tasks', task);
-      }
+      const taskData: UpdateTaskDTO = {
+        ...formData,
+        dueDate: new Date(formData.dueDate)
+      };
+      await axiosClient.put(`/api/tasks/${id}`, taskData);
+      navigate('/tasks');
     } catch (error) {
-      console.error('Error submitting task:', error);
+      console.error('Error updating task:', error);
+    } finally {
+      setIsSaving(false);
     }
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  if (isLoading) return <Loading />;
 
   return (
-    <div>
-      <h1>{id ? 'Edit Task' : 'Create Task'}</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Title:
-          <input
-            type="text"
-            value={task.title}
-            onChange={(e) => setTask({ ...task, title: e.target.value })}
-            required
-          />
-        </label>
-        <label>
-          Description:
-          <textarea
-            value={task.description}
-            onChange={(e) => setTask({ ...task, description: e.target.value })}
-            required
-          />
-        </label>
-        <label>
-          Status:
-          <select
-            value={task.status}
-            onChange={(e) => setTask({ ...task, status: e.target.value })}
-          >
-            <option value="pending">Pending</option>
-            <option value="completed">Completed</option>
-          </select>
-        </label>
-        <button type="submit">Save</button>
-      </form>
+    <div className="max-w-3xl mx-auto">
+      <div className="bg-white shadow-md rounded-lg p-6">
+        <h1 className="text-2xl font-bold text-gray-900 mb-6">Edit Task</h1>
+        <TaskForm
+          initialData={task}
+          onSubmit={handleSubmit}
+          isLoading={isSaving}
+        />
+      </div>
     </div>
   );
 };

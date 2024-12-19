@@ -1,20 +1,38 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import Button from './ui/Button';
 
-const Sidebar = () => {
+const NavBar = () => {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
   return (
-    <div className="sidebar">
-      <h2>Admin Panel</h2>
-      <ul>
-        <li>
-          <Link to="/tasks">Task List</Link>
-        </li>
-        <li>
-          <Link to="/create-task">Create Task</Link>
-        </li>
-      </ul>
-    </div>
+    <nav className="bg-white shadow">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          <div className="flex">
+            <Link to="/tasks" className="flex-shrink-0 flex items-center">
+              <span className="text-xl font-bold text-indigo-600">Task Manager</span>
+            </Link>
+          </div>
+          <div className="flex items-center">
+            <Button
+              variant="secondary"
+              onClick={handleLogout}
+            >
+              Sign out
+            </Button>
+          </div>
+        </div>
+      </div>
+    </nav>
   );
 };
 
-export default Sidebar;
+export default NavBar;
